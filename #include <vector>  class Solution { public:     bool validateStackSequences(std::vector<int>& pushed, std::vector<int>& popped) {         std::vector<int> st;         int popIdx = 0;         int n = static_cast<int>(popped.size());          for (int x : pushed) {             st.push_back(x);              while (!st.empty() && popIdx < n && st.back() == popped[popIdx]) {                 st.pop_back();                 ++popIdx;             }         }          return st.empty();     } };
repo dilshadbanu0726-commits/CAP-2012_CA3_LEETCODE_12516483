@@ -1,0 +1,75 @@
+#include <vector>
+
+class MyCircularDeque {
+private:
+    std::vector<int> buf;
+    int head;
+    int count;
+    int capacity;
+
+    int rearIndex() const {
+        return (head + count - 1) % capacity;
+    }
+
+public:
+    MyCircularDeque(int k) : buf(k, 0), head(0), count(0), capacity(k) {}
+
+    bool insertFront(int value) {
+        if (isFull()) {
+            return false;
+        }
+        head = (head - 1 + capacity) % capacity;
+        buf[head] = value;
+        ++count;
+        return true;
+    }
+
+    bool insertLast(int value) {
+        if (isFull()) {
+            return false;
+        }
+        int idx = (head + count) % capacity;
+        buf[idx] = value;
+        ++count;
+        return true;
+    }
+
+    bool deleteFront() {
+        if (isEmpty()) {
+            return false;
+        }
+        head = (head + 1) % capacity;
+        --count;
+        return true;
+    }
+
+    bool deleteLast() {
+        if (isEmpty()) {
+            return false;
+        }
+        --count;
+        return true;
+    }
+
+    int getFront() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return buf[head];
+    }
+
+    int getRear() {
+        if (isEmpty()) {
+            return -1;
+        }
+        return buf[rearIndex()];
+    }
+
+    bool isEmpty() {
+        return count == 0;
+    }
+
+    bool isFull() {
+        return count == capacity;
+    }
+};
